@@ -41,11 +41,58 @@ class App extends React.Component{
     "Outono": "fa-tree",
     "Inverno": "fa-snowman"  
   }
+
+  obterLocalizacao(){
+    window.navigator.geolocation.getCurrentPosition(
+      (position) => {
+        let data = new Date()
+        let estacao = this.obterEstacao(data, position.coords.latitude)
+        let icone = this.icones[estacao]
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          data: data.toLocaleString(),
+          estacao: estacao,
+          icone: icone
+        })  
+      }
+    )
+  }
   
   render(){
     return (
-      <div>
-        Meu App
+      <div className='container mt-2'>
+        {/* .row.justify-content-center   */}
+        <div className="row justify-content-center">
+          {/* .col-md-8 */}
+          <div className="col-md-8">
+            {/* .card>.card-body   */}
+            <div className="card">
+              <div className="card-body">
+                {/* .d-flex.align-items-center.border.rounded.mb-2 */}
+                <div className="d-flex align-items-center border rounded mb-2" style={{height: '6rem'}}>
+                  {/* i.fas.fa-5x */}
+                  <i className={`fas fa-5x ${this.state.icone}`}></i>
+                  {/* p.w-75.ms-3.text-center.fs-1 */}
+                  <p className="w-75 ms-3 text-center fs-1">
+                    {`${this.state.estacao}`}
+                  </p>
+                </div>
+                {/* div>p.text-center */}
+                <div>
+                  <p className="text-center">
+                    {
+                      this.state.latitude ?
+                        `Coordenadas: ${this.state.latitude}, ${this.state.longitude}. Data: ${this.state.data}.`
+                      :
+                        `Clique no botão para saber a sua estação climática.`
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div> 
     )
   }
